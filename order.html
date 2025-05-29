@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Page des Commandes - Panier</title>
+<style>
+  /* Styles identiques à ceux fournis précédemment */
+</style>
+</head>
+<body>
+  <h1>Votre Panier</h <h1>Votre Panier</h1>
+  <div id="orders"></div>
+  <div id="totalPrice"></div>
+  <div id="emptyMessage" style="display:none;">Votre panier est vide.</div>
+
+<script>
+  // Récupérer les commandes depuis le backend
+  fetch('get_cart.php')
+    .then(response => response.json())
+    .then(cart => {
+      const ordersDiv = document.getElementById('orders');
+      const totalPriceDiv = document.getElementById('totalPrice');
+      const emptyMessageDiv = document.getElementById('emptyMessage');
+
+      if (cart.length === 0) {
+        emptyMessageDiv.style.display = 'block';
+        ordersDiv.style.display = 'none';
+        totalPriceDiv.style.display = 'none';
+      } else {
+        emptyMessageDiv.style.display = 'none';
+        ordersDiv.style.display = 'flex';
+        totalPriceDiv.style.display = 'block';
+
+        let total = 0;
+
+        cart.forEach(item => {
+          const itemTotalPrice = item.total_price;
+          total += itemTotalPrice;
+
+          const orderItemDiv = document.createElement('div');
+          orderItemDiv.className = 'order-item';
+
+          const img = document.createElement('img');
+          img.src = item.image; // Assurez-vous que l'image est récupérée correctement
+          img.alt = item.product_id; // Remplacez par le titre ou l'ID du produit
+
+          const detailsDiv = document.createElement('div');
+          detailsDiv.className = 'order-details';
+
+          const titleEl = document.createElement('p');
+          titleEl.className = 'order-title';
+          titleEl.textContent = `Produit ID: ${item.product_id}`; // Remplacez par le titre du produit si disponible
+
+          const qtyPriceEl = document.createElement('p');
+          qtyPriceEl.className = 'order-qty-price';
+          qtyPriceEl.textContent = `Quantité: ${item.quantity} - Prix total: ${itemTotalPrice} DH`;
+
+          detailsDiv.appendChild(titleEl);
+          detailsDiv.appendChild(qtyPriceEl);
+
+          orderItemDiv.appendChild(img);
+          orderItemDiv.appendChild(detailsDiv);
+
+          ordersDiv.appendChild(orderItemDiv);
+        });
+
+        totalPriceDiv.textContent = `Total général : ${total} DH`;
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+</script>
+</body>
+</html>
