@@ -1107,7 +1107,7 @@ if (isset($_SESSION['user'])) {
             <nav>
                 <ul>
                     <li><a href="home.php">Accueil</a></li>
-                    <li><a href="collection.php" class="active">Collections</a></li>
+                    <li><a href="collecti.php" class="active">Collections</a></li>
                     <li><a href="savoir-faire.php">Savoir-Faire</a></li>
                     <li><a href="evenements.php">Événements</a></li>
                     <li><a href="contact.php">Contact</a></li>
@@ -1181,13 +1181,11 @@ if (isset($_SESSION['user'])) {
         
         
     </main>
-<!-- Correction du code HTML -->
 <div class="product-actions">
     <button class="view-btn" data-id="${product.id}">
         <i class="fas fa-eye"></i> Voir
     </button>
-</div>
-<textarea id="orderTextField" placeholder="Votre commande..." rows="5" style="width: 100%; margin-top: 20px;"></textarea>
+</div><textarea id="orderTextField" placeholder="Votre commande..." rows="5" style="width: 100%; margin-top: 20px;"></textarea>
 <button id="saveOrderBtn">Enregistrer la commande</button>
 <button id="cancelOrderBtn" style="margin-top: 10px;">Annuler la commande</button>
 
@@ -1196,7 +1194,7 @@ if (isset($_SESSION['user'])) {
 <div id="productGrid"></div>
 
 <!-- Modale produit -->
-<div id="productModal" class="modal">
+<div id="productModal" style="display: none;">
   <div class="modal-content">
     <span class="close-modal">&times;</span>
     <img id="modalMainImage" src="" alt="" />
@@ -1208,12 +1206,10 @@ if (isset($_SESSION['user'])) {
 </div>
 
 <!-- Modale de confirmation -->
-<div id="confirmationModal" class="modal">
-  <div class="modal-content confirmation-content">
-    <span class="close-modal">&times;</span>
-    <div class="confirmation-icon">
-      <i class="fas fa-check-circle"></i>
-    </div>
+<div id="confirmationModal" class="confirmation-modal" style="display:none;">
+  <div class="confirmation-content">
+    <span class="close-confirmation">&times;</span>
+    <div class="confirmation-icon"><i class="fas fa-check-circle"></i></div>
     <h2 class="confirmation-title">Commande confirmée !</h2>
     <p class="confirmation-text">Merci pour votre commande. Voici un récapitulatif :</p>
 
@@ -1230,54 +1226,62 @@ if (isset($_SESSION['user'])) {
       <h3>Méthode de paiement</h3>
       <div class="payment-methods">
         <div class="payment-method" data-method="delivery">
-          <div class="payment-icon">
-            <i class="fas fa-truck"></i>
-          </div>
+          <div class="payment-icon"><i class="fas fa-truck"></i></div>
           <span class="payment-label">Paiement à la livraison</span>
         </div>
         <div class="payment-method" data-method="online">
-          <div class="payment-icon">
-            <i class="fas fa-credit-card"></i>
-          </div>
+          <div class="payment-icon"><i class="fas fa-credit-card"></i></div>
           <span class="payment-label">Paiement en ligne</span>
         </div>
       </div>
 
       <button class="confirm-btn">Confirmer le paiement</button>
-      <button class="cancel-btn">Annuler la commande</button>
+      <button id="cancelOrderModalBtn" style="
+        margin-top: 10px;
+        background-color: var(--dark-wood);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: var(--transition);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      ">Annuler la commande</button>
     </div>
   </div>
 </div>
 
-<div id="messageModal" class="modal">
-  <div class="modal-content">
-    <span class="close-modal">&times;</span>
-    <div class="confirmation-icon">
-      <i class="fas fa-info-circle"></i>
-    </div>
+<!-- Modal messages info -->
+<div id="messageModal" class="confirmation-modal" style="display:none;">
+  <div class="confirmation-content">
+    <span class="close-message">&times;</span>
+    <div class="confirmation-icon"><i class="fas fa-info-circle"></i></div>
     <h2 class="confirmation-title">Information</h2>
     <p class="confirmation-text" id="messageContent">Message ici...</p>
   </div>
 </div>
 
-<!-- Le reste du footer reste inchangé -->
 
-<script>
-// Données des produits (inchangé)
-const products = [
-    {
-        id: 1,
-        title: "Vase en Zellige 'Étoile de Fès'",
-        price: 1450,
-        oldPrice: null,
-        rating: 4.5,
-        category: "zellige & céramique",
-        region: "fes",
-        image: "vv.jpg",
-        badge: "Nouveauté",
-        description: "Magnifique vase en zellige traditionnel de Fès..."
-    },
-  {
+
+ <script>
+    // Données des produits
+    const products = [
+        {
+           id: 1,
+                title: "Vase en Zellige 'Étoile de Fès'",
+                price: 1450,
+                oldPrice: null,
+                rating: 4.5,
+                category: "zellige & céramique",
+                region: "fes",
+                image: "vv.jpg",
+                badge: "Nouveauté",
+                description: "Magnifique vase en zellige traditionnel de Fès, fabriqué à la main par nos maîtres artisans. Chaque pièce est unique avec ses motifs géométriques complexes et ses couleurs vibrantes."
+            },
+            {
                 id: 2,
                 title: "Tapis Berbère 'Lignes du désert'",
                 price: 3200,
@@ -1409,137 +1413,55 @@ const products = [
                 description: "Bracelet ouvert en argent massif 925 gravé de motifs berbères ancestraux. Artisanat de l'Atlas central."
             }
         ]
-;
 
-// Variables globales
+
 let orderLines = [];
-let selectedPaymentMethod = '';
+let selectedPaymentMethod = '';  // Variable globale pour stocker le mode de paiement sélectionné
 
-// Initialisation
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     displayProducts();
-    setupModals();
+    setupModal();
     setupCategoryFilters();
     setupSorting();
-    setupOrderHandlers();
+    setupOrderSaving();
+    setupPaymentMethodSelection();
+    setupCancelButtons();
 });
 
-// Fonctions principales
-function displayProducts(productsToDisplay = products) {
-    const productGrid = document.getElementById('productGrid');
-    productGrid.innerHTML = '';
-
-    if (!productsToDisplay || productsToDisplay.length === 0) {
-        productGrid.innerHTML = '<p class="no-products">Aucun produit disponible</p>';
-        return;
-    }
-
-    productsToDisplay.forEach(product => {
-        const card = createProductCard(product);
-        productGrid.appendChild(card);
-    });
-}
-
-function createProductCard(product) {
-    const card = document.createElement('div');
-    card.className = 'product-card';
-
-    let badgeHTML = product.badge ? `<div class="product-badge">${product.badge}</div>` : '';
-    let oldPriceHTML = product.oldPrice ? `<span class="old-price">${product.oldPrice} DH</span>` : '';
-
-    card.innerHTML = `
-        <div class="product-image-container">
-            ${badgeHTML}
-            <img src="images/${product.image}" alt="${product.title}" class="product-image">
-            <div class="product-actions">
-                <button class="view-btn" data-id="${product.id}"><i class="fas fa-eye"></i> Voir</button>
-                <button class="add-to-cart-btn" data-id="${product.id}"><i class="fas fa-shopping-cart"></i></button>
-            </div>
-        </div>
-        <div class="product-info">
-            <h3>${product.title}</h3>
-            <div class="product-meta">
-                <div class="price">${product.price} DH ${oldPriceHTML}</div>
-                <div class="rating">
-                    ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}
-                </div>
-            </div>
-        </div>
-    `;
-
-    // Gestion des événements
-    card.querySelector('.view-btn').addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        openProductModal(product);
-    });
-
-    card.querySelector('.add-to-cart-btn').addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        addToCart(product);
-    });
-
-    return card;
-}
-
-function addToCart(product) {
-    const existing = orderLines.find(p => p.id === product.id);
-    if (existing) {
-        existing.quantite += 1;
-        existing.total = existing.quantite * product.price;
-    } else {
-        orderLines.push({
-            id: product.id,
-            nom: product.title,
-            quantite: 1,
-            prix: product.price,
-            total: product.price
-        });
-    }
-
-    updateOrderTextarea();
-}
-
-function updateOrderTextarea() {
+function setupOrderSaving() {
+    const saveOrderBtn = document.getElementById('saveOrderBtn');
     const orderTextField = document.getElementById('orderTextField');
-    orderTextField.value = orderLines.map(p =>
-        `${p.nom} - ${p.quantite} x ${p.prix} DH = ${p.total} DH`
-    ).join('\n');
-    orderTextField.dataset.orders = JSON.stringify(orderLines);
-}
+    const orderMessage = document.getElementById('orderMessage');
 
-function setupModals() {
-    // Gestion commune des modales
-    document.querySelectorAll('.modal').forEach(modal => {
-        const closeBtn = modal.querySelector('.close-modal');
-        closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+    saveOrderBtn.addEventListener('click', function () {
+        if (orderLines.length === 0) {
+            orderMessage.textContent = "Veuillez ajouter des produits à la commande.";
+            return;
+        }
+        orderMessage.textContent = "";
 
-        window.addEventListener('click', (e) => {
-            if (e.target === modal) modal.classList.remove('active');
+        fetch('save_order.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `orders=${encodeURIComponent(JSON.stringify(orderLines))}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showConfirmationModal(orderLines);
+                // Ne vide pas encore la commande ici, ça sera fait après confirmation paiement
+            } else {
+                orderMessage.textContent = "Erreur lors de l'enregistrement de la commande.";
+            }
+        })
+        .catch(error => {
+            orderMessage.textContent = "Erreur de connexion au serveur.";
+            console.error(error);
         });
     });
 }
 
-function openProductModal(product) {
-    const modal = document.getElementById('productModal');
-    const modalContent = modal.querySelector('.modal-content');
-
-    modalContent.innerHTML = `
-        <span class="close-modal">&times;</span>
-        <img id="modalMainImage" src="images/${product.image}" alt="${product.title}">
-        <div class="modal-text">
-            <h3 id="modalProductTitle">${product.title}</h3>
-            <div id="modalProductPrice">${product.price} DH</div>
-            <div id="modalProductRating">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</div>
-            <p id="modalProductDescription">${product.description}</p>
-        </div>
-    `;
-
-    modal.classList.add('active');
-}
-
-function showConfirmationModal() {
+function showConfirmationModal(orderLines) {
     const modal = document.getElementById('confirmationModal');
     const reference = `CMD-${new Date().getFullYear()}-${Math.floor(Math.random() * 9000 + 1000)}`;
     const total = orderLines.reduce((sum, product) => sum + (product.prix * product.quantite), 0);
@@ -1550,92 +1472,40 @@ function showConfirmationModal() {
     document.getElementById('orderShipping').textContent = "Standard (5-7 jours)";
     document.getElementById('orderTotal').textContent = total.toFixed(2);
 
-    modal.classList.add('active');
+    // Reset selection paiement
+    selectedPaymentMethod = '';
+    document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
 
-    // Gestion des choix de paiement
-    document.querySelectorAll('.payment-method').forEach(method => {
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+}
+
+function setupPaymentMethodSelection() {
+    const paymentMethods = document.querySelectorAll('.payment-method');
+    paymentMethods.forEach(method => {
         method.addEventListener('click', () => {
-            document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
+            paymentMethods.forEach(m => m.classList.remove('active'));
             method.classList.add('active');
             selectedPaymentMethod = method.dataset.method;
         });
     });
 
-    // Confirmer le paiement
-    modal.querySelector('.confirm-btn').addEventListener('click', () => {
+    document.querySelector('.close-confirmation').addEventListener('click', () => {
+        closeConfirmationModal();
+    });
+
+    document.querySelector('.confirm-btn').addEventListener('click', () => {
         if (!selectedPaymentMethod) {
-            showMessageModal("Veuillez sélectionner un mode de paiement.");
+            alert("Veuillez sélectionner un mode de paiement.");
             return;
         }
-        
         saveOrderToDatabase(orderLines, selectedPaymentMethod);
-        modal.classList.remove('active');
-    });
-
-    // Annuler
-    modal.querySelector('.cancel-btn').addEventListener('click', () => {
-        modal.classList.remove('active');
+        closeConfirmationModal();
     });
 }
 
-function saveOrderToDatabase(orderLines, paymentMethod) {
-    const userId = 1; // À remplacer par l'ID de l'utilisateur connecté
-    const orderData = {
-        user_id: userId,
-        order_lines: orderLines,
-        payment_method: paymentMethod,
-    };
-
-    fetch('save_order.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showMessageModal("Commande enregistrée avec succès !");
-            resetOrder();
-        } else {
-            showMessageModal("Erreur lors de l'enregistrement : " + (data.message || ""));
-        }
-    })
-    .catch(error => {
-        console.error("Erreur : ", error);
-        showMessageModal("Erreur de connexion au serveur");
-    });
+function closeConfirmationModal() {
+    const modal = document.getElementById('confirmationModal');
+    modal.style.display = 'none';
+    modal.classList.remove('active');
 }
-
-function showMessageModal(message) {
-    const modal = document.getElementById('messageModal');
-    document.getElementById('messageContent').textContent = message;
-    modal.classList.add('active');
-}
-
-function resetOrder() {
-    orderLines = [];
-    document.getElementById('orderTextField').value = '';
-    document.getElementById('orderTextField').dataset.orders = '[]';
-}
-
-function setupOrderHandlers() {
-    // Enregistrer la commande
-    document.getElementById('saveOrderBtn').addEventListener('click', () => {
-        if (orderLines.length === 0) {
-            showMessageModal("Veuillez ajouter des produits à la commande.");
-            return;
-        }
-        showConfirmationModal();
-    });
-
-    // Annuler la commande
-    document.getElementById('cancelOrderBtn').addEventListener('click', () => {
-        resetOrder();
-        showMessageModal("Commande annulée.");
-    });
-}
-
-// Les fonctions setupCategoryFilters() et setupSorting() restent inchangées
-</script>

@@ -34,7 +34,7 @@ $options = [
 try {
     $pdo = new PDO($dsn, $username, $password, $options);
 
-    $stmt = $pdo->prepare("INSERT INTO commandes (user_id, product_id, quantite, total) VALUES (?, ?, ?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO order_details (user_id, product_id, quantite, total) VALUES (?, ?, ?, ?)");
 
     foreach ($orders as $order) {
         // Vérifier les données minimales

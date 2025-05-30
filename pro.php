@@ -365,11 +365,13 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             
             <nav>
-                <ul>
-                    <li><a href="das.php">DashBoard</a></li>
-                    <li><a href="pro.php">Produits</a></li>
-                    <li><a href="pp.php">Paiement</a></li>
-                    <li><a href="cont.php">Contact</a></li>
+                <ul>    <li><a href="h.php"><i class="fas fa-home"></i> Home</a></li>
+
+                    
+                    <li><a href="das.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="pro.php"><i class="fas fa-box-open"></i> Produits</a></li>
+                    <li><a href="pp.php"><i class="fas fa-credit-card"></i> Paiements</a></li>
+                    <li><a href="cont.php"><i class="fas fa-envelope"></i> Contact</a></li>
                 </ul>
             </nav>
         </div>
@@ -378,27 +380,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="admin-container">
         <h1><i class="fas fa-cubes"></i> Gestion des Produits</h1>
 
-        <!-- Formulaire d'ajout -->
-        <form class="product-form" method="POST">
-            <h2><i class="fas fa-plus-circle"></i> Ajouter un produit</h2>
-            
-            <div class="form-group">
-                <label for="title">Titre du produit</label>
-                <input type="text" id="title" name="title" placeholder="Ex: Tapis berbère" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="price">Prix (€)</label>
-                <input type="number" step="0.01" id="price" name="price" placeholder="Ex: 149.99" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea id="description" name="description" placeholder="Description détaillée du produit..." required></textarea>
-            </div>
-            
-            <button type="submit" name="add" class="btn"><i class="fas fa-save"></i> Ajouter le produit</button>
-        </form>
+       
 
         <!-- Liste des produits -->
         <h2><i class="fas fa-list-ul"></i> Catalogue des produits</h2>
@@ -431,5 +413,3 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </tbody>
         </table>
     </div>
-</body>
-</html>

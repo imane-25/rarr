@@ -605,7 +605,23 @@ $user = $_SESSION['user'];
         </div>
         <?php endif; ?>
     </div>
-    
+    <a href="edit_profile.php" class="edit-btn">✏️ Modifier mon profil</a>
+
+<style>
+.edit-btn {
+    display: inline-block;
+    margin: 20px 0;
+    padding: 10px 20px;
+    background-color: #9e6d6d;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+.edit-btn:hover {
+    background-color: #7e4f4f;
+}
+</style>
     <!-- Footer -->
         <footer>
         <div class="footer-wave"></div>

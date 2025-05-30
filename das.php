@@ -364,7 +364,8 @@ try {
             </div>
             
             <nav>
-                <ul>                    <li><a href="h.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <ul>                    
+                        <li><a href="h.php"><i class="fas fa-home"></i> Home</a></li>
 
                     <li><a href="das.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="pro.php"><i class="fas fa-box-open"></i> Produits</a></li>

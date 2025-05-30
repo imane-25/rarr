@@ -1410,7 +1410,7 @@ if (isset($_SESSION['user'])) {
                 rating: 4.2,
                 category: "zellige & céramique",
                 region: "fes",
-                image: "tass.jpg",
+                image: "tasse.jpg",
                 badge: null,
                 description: "Tasse artisanale décorée avec des carreaux de zellige typiques de Fès. Idéale pour le café ou le thé marocain."
             },
@@ -1422,7 +1422,7 @@ if (isset($_SESSION['user'])) {
                 rating: 4.4,
                 category: "tapis berbères",
                 region: "sud marocain",
-                image: "taz.jpg",
+                image: "taznakht.jpg",
                 badge: "Édition Limitée",
                 description: "Tapis traditionnel Taznakht tissé à la main avec laine naturelle. Motifs berbères complexes et couleurs chaleureuses. 220x150 cm."
             },
@@ -1434,7 +1434,7 @@ if (isset($_SESSION['user'])) {
                 rating: 4.7,
                 category: "marqueterie",
                 region: "essaouira",
-                image: "coff.jpg",
+                image: "coffret.jpg",
                 badge: null,
                 description: "Coffret raffiné en bois de thuya avec incrustations géométriques en citronnier et nacre. Parfait pour bijoux ou souvenirs."
             },
@@ -1446,7 +1446,7 @@ if (isset($_SESSION['user'])) {
                 rating: 4.5,
                 category: "luminaires",
                 region: "marrakech",
-                image: "sus.jpg",
+                image: "suspension.jpg",
                 badge: "Nouveauté",
                 description: "Suspension artisanale en laiton ciselé, inspirée des formes lunaires marocaines. Diamètre : 50 cm. Fait main à Marrakech."
             }, {
@@ -1457,7 +1457,7 @@ if (isset($_SESSION['user'])) {
                 rating: 4.3,
                 category: "bijoux",
                 region: "atlas",
-                image: "bbl.jpg",
+                image: "bracelet.jpg",
                 badge: null,
                 description: "Bracelet ouvert en argent massif 925 gravé de motifs berbères ancestraux. Artisanat de l'Atlas central."
             }

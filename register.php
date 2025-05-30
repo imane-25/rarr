@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $dbname = "artisanat_beldi";
 
     try {
+        // Champs requis
         $required = ['nom', 'prenom', 'age', 'ville', 'adresse', 'pays', 'code_postal', 'email'];
         foreach ($required as $field) {
             if (empty($_POST[$field])) {
@@ -15,12 +16,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
 
+        // Vérifications spécifiques
         if ($_POST['age'] < 18) throw new Exception("Vous devez avoir au moins 18 ans.");
         if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) throw new Exception("Format d'email invalide.");
         if (empty($_POST['password'])) throw new Exception("Le mot de passe est requis.");
         if ($_POST['password'] !== $_POST['confirm_password']) throw new Exception("Les mots de passe ne correspondent pas.");
         if (strlen($_POST['password']) < 8) throw new Exception("Mot de passe trop court.");
 
+        // Traitement de la photo
         $photoName = null;
         if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
             $uploadDir = 'uploads/profiles/';
@@ -31,11 +34,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             move_uploaded_file($_FILES['photo']['tmp_name'], $uploadDir . $photoName);
         }
 
+        // Hash du mot de passe
         $passwordHash = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
+        // Connexion à la base
         $pdo = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+        // Insertion en base
         $stmt = $pdo->prepare("INSERT INTO utilisateurs 
             (nom, prenom, age, ville, adresse, pays, code_postal, email, telephone, photo, password, date_inscription) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");
@@ -46,6 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_POST['email'], $_POST['telephone'] ?? null, $photoName, $passwordHash
         ]);
 
+        // Sauvegarde des données utilisateur en session
         $_SESSION['user'] = [
             'id' => $pdo->lastInsertId(),
             'email' => $_POST['email'],
@@ -61,17 +68,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'date_inscription' => date('Y-m-d H:i:s'),
         ];
 
-        // Redirection spéciale
-       $email = trim($_POST['email']);
+        // 🔁 Redirection spéciale selon l'email
+        $email = trim($_POST['email']);
 
-if ($email === 'imaneoussadm1095@gmail.com') {
-    header("Location: h.php");
-    exit();
-}
+        if ($email === 'ahmed@example.com') {
+            $_SESSION['role'] = 'Super Admin';
+            header("Location: h.php");
+            exit();
+        } elseif ($email === 'fatimaa@example.com') {
+            $_SESSION['role'] = 'Responsable produits';
+            header("Location: h.php");
+            exit();
+        } elseif ($email === 'youssef@example.com') {
+            $_SESSION['role'] = 'Gestionnaire commandes';
+            header("Location: h.php");
+            exit();
+        }
 
-        
-
-        // Redirection classique
+        // 🎯 Redirection standard pour les autres
         header("Location: home.php");
         exit();
 
@@ -80,7 +94,9 @@ if ($email === 'imaneoussadm1095@gmail.com') {
     } catch (Exception $e) {
         die("Erreur: " . $e->getMessage());
     }
+
 } else {
+    // Accès direct interdit
     header("Location: inscription.php");
     exit();
 }
