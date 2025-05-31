@@ -35,7 +35,7 @@ try {
         $total_price = $line['total'];
 
         // Préparer et exécuter l'insertion dans la table order_details
-        $stmt = $conn->prepare("INSERT INTO order_details (user_id, product_id, payment_method, quantity, total_price) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO order_details (user_id, product_id, payment_method, quantite, total) VALUES (?, ?, ?, ?, ?)");
         $stmt->bind_param("iisdi", $user_id, $product_id, $payment_method, $quantity, $total_price);
         $stmt->execute();
     }

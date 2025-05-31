@@ -1188,6 +1188,7 @@ if (isset($_SESSION['user'])) {
 </div><textarea id="orderTextField" placeholder="Votre commande..." rows="5" style="width: 100%; margin-top: 20px;"></textarea>
 <button id="saveOrderBtn">Enregistrer la commande</button>
 <button id="cancelOrderBtn" style="margin-top: 10px;">Annuler la commande</button>
+<button id="btnFacture">Voir la facture</button>
 
 <p id="orderMessage"></p>
 
@@ -1508,4 +1509,6 @@ function closeConfirmationModal() {
     const modal = document.getElementById('confirmationModal');
     modal.style.display = 'none';
     modal.classList.remove('active');
-}
+}document.getElementById('btnFacture').addEventListener('click', () => {
+    window.location.href = `facture.php?user_id=${userId}`;
+  });

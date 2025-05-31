@@ -2,7 +2,6 @@
 session_start();
 header('Content-Type: application/json');
 
-// Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user']['id'])) {
     echo json_encode(['success' => false, 'message' => 'Utilisateur non connecté.']);
     exit;
@@ -10,7 +9,6 @@ if (!isset($_SESSION['user']['id'])) {
 
 $user_id = $_SESSION['user']['id'];
 
-// Vérifier si les données sont bien envoyées
 if (!isset($_POST['orders'])) {
     echo json_encode(['success' => false, 'message' => 'Données de commande manquantes.']);
     exit;
@@ -23,34 +21,53 @@ if (!is_array($orders) || count($orders) === 0) {
     exit;
 }
 
-// Connexion à la base de données (à adapter)
 $dsn = 'mysql:host=localhost;dbname=artisanat_beldi;charset=utf8mb4';
 $username = 'root';
-$password = ''; // ou ton mot de passe MySQL
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-];
+$password = '';
+$options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
 
 try {
     $pdo = new PDO($dsn, $username, $password, $options);
+    $pdo->beginTransaction();
 
-    $stmt = $pdo->prepare("INSERT INTO order_details (user_id, product_id, quantite, total) VALUES (?, ?, ?, ?)");
+    $stmtOrder = $pdo->prepare("INSERT INTO order_details (user_id, product_id, quantite, total, payment_method) VALUES (?, ?, ?, ?, ?)");
+    $stmtFacture = $pdo->prepare("INSERT INTO facture (order_id, user_id, montant, date_facture) VALUES (?, ?, ?, NOW())");
+
+    $validPaymentMethods = ['online', 'delivery'];
 
     foreach ($orders as $order) {
-        // Vérifier les données minimales
-        if (!isset($order['id'], $order['quantite'], $order['total'])) continue;
+        if (!isset($order['id'], $order['quantite'], $order['total'], $order['payment_method'])) continue;
 
-        $stmt->execute([
+        $paymentMethod = strtolower($order['payment_method']);
+        if (!in_array($paymentMethod, $validPaymentMethods)) continue;
+
+        // Insert order line
+        $stmtOrder->execute([
             $user_id,
-            $order['id'],          // product_id
+            $order['id'],
             $order['quantite'],
+            $order['total'],
+            $paymentMethod
+        ]);
+
+        // Récupérer l'id inséré
+        $order_id = $pdo->lastInsertId();
+
+        // Insert facture liée
+        $stmtFacture->execute([
+            $order_id,
+            $user_id,
             $order['total']
         ]);
     }
 
-    echo json_encode(['success' => true]);
+    $pdo->commit();
 
-} catch (PDOException $e) {
-    echo json_encode(['success' => false, 'message' => 'Erreur BDD : ' . $e->getMessage()]);
+    echo json_encode(['success' => true, 'message' => 'Commandes et factures insérées avec succès.']);
+} catch (Exception $e) {
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
+    echo json_encode(['success' => false, 'message' => 'Erreur : ' . $e->getMessage()]);
 }
 ?>

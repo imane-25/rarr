@@ -1,4 +1,18 @@
 <?php
+session_start();
+
+$user = null;
+if (isset($_SESSION['user'])) {
+    $user = [
+        'id' => $_SESSION['user']['id'] ?? 0,
+        'email' => htmlspecialchars($_SESSION['user']['email'] ?? ''),
+        'nom' => htmlspecialchars($_SESSION['user']['nom'] ?? ''),
+        'prenom' => htmlspecialchars($_SESSION['user']['prenom'] ?? ''),
+        'ville' => htmlspecialchars($_SESSION['user']['ville'] ?? ''),
+        'age' => $_SESSION['user']['age'] ?? 0
+    ];
+}
+?><?php
 $pdo = new PDO("mysql:host=localhost;dbname=artisanat_beldi", "root", "");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -351,6 +365,48 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 overflow-x: auto;
             }
         }
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            z-index: 1;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            overflow: hidden;    flex-direction: column; /* ← disposition verticale */
+
+        }
+
+        .profile-dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu a {
+            color: var(--dark-wood);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+            transition: all 0.3s;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f8f8f8;
+            color: var(--gold);
+            padding-left: 20px;
+        }
+
+        .profile-trigger {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -370,9 +426,19 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     
                     <li><a href="das.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="pro.php"><i class="fas fa-box-open"></i> Produits</a></li>
-                    <li><a href="pp.php"><i class="fas fa-credit-card"></i> Paiements</a></li>
-                    <li><a href="cont.php"><i class="fas fa-envelope"></i> Contact</a></li>
-                </ul>
+                    <li><a href="pp.php"><i class="fas fa-credit-card"></i> Orders</a></li>
+              
+                    <li class="profile-dropdown">
+                        <a href="#" class="header-icon"><i class="fas fa-user"></i></a>
+                        <ul class="dropdown-menu">
+                            <?php if ($user): ?>
+                                <li><a href="cont.php">Mon profil</a></li>
+                                <li><a href="logout.php">Déconnexion</a></li>
+                            <?php else: ?>
+                                <li><a href="login.php">Connexion</a></li>
+                            <?php endif; ?>
+                        </ul>
+                    </li>  </ul>
             </nav>
         </div>
     </header>
