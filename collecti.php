@@ -1110,9 +1110,7 @@ if (isset($_SESSION['user'])) {
                     <li><a href="collection.php" class="active">Collections</a></li>
                     <li><a href="savoir-faire.php">Savoir-Faire</a></li>
                     <li><a href="evenements.php">Événements</a></li><li>
-  <a href="face.php" style="text-decoration:none; color:inherit;">
-    <i class="fas fa-shopping-basket"></i>
-  </a>
+
 </li>
 
 
@@ -1244,7 +1242,7 @@ if (isset($_SESSION['user'])) {
           <div class="payment-icon">
             <i class="fas fa-credit-card"></i>
           </div>
-          <span class="payment-label">Paiement en ligne</span>
+<a href="p.php" class="payment-label">Paiement en ligne</a>
         </div>
       </div>
 

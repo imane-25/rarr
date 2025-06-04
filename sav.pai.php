@@ -52,4 +52,6 @@ try {
 
 // Fermer la connexion
 $conn->close();
-?>
+?><script>
+  const userId = <?= isset($user['id']) ? intval($user['id']) : 'null'; ?>;
+</script>

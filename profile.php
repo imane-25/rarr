@@ -600,7 +600,10 @@ $user = $_SESSION['user'];
         </div>
         
         <?php if (!empty($user['photo'])): ?>
-        <div class="profile-photo-container">
+        <div class="profile-photo-container"><div class="profile-container">
+  <img src="profile.jpg" alt="Photo de profil" class="profile-photo">
+  <a href="upload_image.php" class="add-photo-btn" title="Ajouter une photo">+</a>
+</div>
             <img src="uploads/profiles/<?= htmlspecialchars($user['photo']) ?>" alt="Photo de profil" class="profile-photo">
         </div>
         <?php endif; ?>

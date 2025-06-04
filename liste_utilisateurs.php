@@ -1,4 +1,18 @@
 <?php
+session_start();
+
+$user = null;
+if (isset($_SESSION['user'])) {
+    $user = [
+        'id' => $_SESSION['user']['id'] ?? 0,
+        'email' => htmlspecialchars($_SESSION['user']['email'] ?? ''),
+        'nom' => htmlspecialchars($_SESSION['user']['nom'] ?? ''),
+        'prenom' => htmlspecialchars($_SESSION['user']['prenom'] ?? ''),
+        'ville' => htmlspecialchars($_SESSION['user']['ville'] ?? ''),
+        'age' => $_SESSION['user']['age'] ?? 0
+    ];
+}
+?><?php
 // Configuration base de données
 $servername = "localhost";
 $username = "root";
@@ -22,7 +36,8 @@ try {
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8" />  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <title>Gestion des utilisateurs</title>
     <style>
         body {
@@ -281,6 +296,11 @@ try {
             display: inline-block;
         }
 
+       .profile-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
         .dropdown-menu {
             position: absolute;
             top: 100%;
@@ -318,6 +338,7 @@ try {
             color: var(--secondary);
             padding-left: 20px;
         }
+
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -360,10 +381,11 @@ try {
 
             <nav>
                 <ul>
-                    <li><a href="h.php"><i class="fas fa-home"></i> Accueil</a></li>
+              <ul>
+                    <li><a href="h.php"><i class="fas fa-home"></i> Home</a></li>
                     <li><a href="das.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                     <li><a href="pro.php"><i class="fas fa-box-open"></i> Produits</a></li>
-                    <li><a href="pp.php"><i class="fas fa-credit-card"></i> Commandes</a></li>
+                    <li><a href="pp.php"><i class="fas fa-credit-card"></i> Orders</a></li>
 
                     <li class="profile-dropdown">
                         <a href="#" class="header-icon"><i class="fas fa-user"></i></a>

@@ -516,8 +516,8 @@ try {
                             <td>
                                 <input type="hidden" name="order_id" value="<?= $order['id'] ?>">
                                 <button type="submit" class="btn"><i class="fas fa-save"></i> Mettre à jour</button>
-                          <a href="facture.php?order_id=<?= $order['id'] ?>" target="_blank" class="btn" style="background-color:#28a745; margin-top:5px;">
-    <i class="fas fa-file-invoice"></i> Afficher Facture
+                          <a href="facture.php?order_id=<?= $order['id'] ?>" target="_blank" class="btn" style="background-color:#D4A76A; margin-top:10px;">
+    <i class="fas fa-file-invoice" style="background-color: #8B5A2B;"></i> Afficher Facture
 </a>
   </td>
                         </form>

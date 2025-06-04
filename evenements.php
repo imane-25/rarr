@@ -1179,7 +1179,7 @@ input, textarea {
 }
 
 button {
-    background-color: #4CAF50;
+    background-color:rgb(115, 61, 48);
     color: white;
     padding: 15px 20px;
     border: none;
@@ -1188,9 +1188,131 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color:rgb(224, 186, 151);
 }
-
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .modal-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 450px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.4s ease-out;
+  }
+  
+  @keyframes slideDown {
+    from { 
+      transform: translateY(-50px);
+      opacity: 0;
+    }
+    to { 
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  #closeModal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #888;
+    transition: color 0.2s;
+  }
+  
+  #closeModal:hover {
+    color: #333;
+  }
+  
+  .modal-content h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.8rem;
+  }
+  
+  #reservationForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  #reservationForm label {
+    font-weight: 500;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  #reservationForm input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s;
+  }
+  
+  #reservationForm input:focus {
+    outline: none;
+    border-color: #9e6d6d;
+    box-shadow: 0 0 0 2px rgba(158, 109, 109, 0.2);
+  }
+  
+  #reservationForm button {
+    background: #9e6d6d;
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: all 0.3s;
+  }
+  
+  #reservationForm button:hover {
+    background: #8a5a5a;
+    transform: translateY(-2px);
+  }
+  
+  #reservationForm button:active {
+    transform: translateY(0);
+  }
+  
+  /* Responsive */
+  @media (max-width: 480px) {
+    .modal-content {
+      padding: 25px 20px;
+    }
+    
+    .modal-content h2 {
+      font-size: 1.5rem;
+    }
+  }
     </style>
 </head>
 <body>  
@@ -1241,7 +1363,7 @@ button:hover {
     </header>
 
     <!-- Hero Section -->
-    <section class="events-hero" style="background-image: url(bbl.jpg);">
+      <section class="events-hero" style="background-image: url(bbl.jpg);">
         <div class="hero-content">
             <div class="hero-text" style="max-width: 800px; margin: 0 auto;">
                 <h2>Nos Événements</h2>
@@ -1259,39 +1381,27 @@ button:hover {
         
         <div class="events-container">
             <!-- Événement 1 -->
-          <div class="events-container">
-    <!-- Événement 1 -->
-    <div class="event-card">
-        <div class="event-image" style="position: relative;">
-            <img src="ae.jpg" alt="Rencontre avec les artisans">
-            <div class="event-date">
-                <span class="day">15</span>
-                <span class="month">Juin</span>
+            <div class="event-card">
+                <div class="event-image" style="position: relative;">
+                    <img src="ae.jpg" alt="Rencontre avec les artisans">
+                    <div class="event-date">
+                        <span class="day">15</span>
+                        <span class="month">Juin</span>
+                    </div>
+                </div>
+                <div class="event-details">
+                    <h3>Rencontre avec les Maîtres Artisans</h3>
+                    <div class="event-meta">
+                        <span><i class="far fa-clock"></i> 14h - 18h</span>
+                        <span><i class="fas fa-map-marker-alt"></i> Notre boutique, Marrakech</span>
+                    </div>
+                    <p class="event-excerpt">
+                        Une après-midi exceptionnelle pour rencontrer nos artisans et découvrir leurs techniques de travail. Démonstrations en direct et possibilité de commander des pièces personnalisées.
+                    </p>
+                </div>
+                <button class="reserve-btn" data-event-title="Rencontre avec les Maîtres Artisans">Réserver</button>
             </div>
-        </div>
-        <div class="event-details">
-            <h3>Rencontre avec les Maîtres Artisans</h3>
-            <div class="event-meta">
-                <span><i class="far fa-clock"></i> 14h - 18h</span>
-                <span><i class="fas fa-map-marker-alt"></i> Notre boutique, Marrakech</span>
-            </div>
-            <p class="event-excerpt">
-                Une après-midi exceptionnelle pour rencontrer nos artisans et découvrir leurs techniques de travail. Démonstrations en direct et possibilité de commander des pièces personnalisées.
-            </p>
-        </div>
-    </div>
 
-    <!-- Fenêtre modale contenant le formulaire -->
-    <div id="reservationModal" class="modal">
-        <div class="modal-content">
-            <span id="closeModal" class="close">&times;</span>
-            <h2>Réservez votre place</h2>
-           
-        </div>
-    </div>
-</div>
-
-            
             <!-- Événement 2 -->
             <div class="event-card">
                 <div class="event-image" style="position: relative;">
@@ -1311,6 +1421,7 @@ button:hover {
                         Apprenez les bases de la fabrication du zellige avec notre maître artisan Mohammed. Chaque participant repartira avec sa petite création. Matériel fourni.
                     </p>
                 </div>
+                <button class="reserve-btn" data-event-title="Atelier Initiation au Zellige">Réserver</button>
             </div>
             
             <!-- Événement 3 -->
@@ -1332,11 +1443,12 @@ button:hover {
                         Découvrez une collection exceptionnelle de tapis berbères anciens et contemporains, avec la présence exceptionnelle des tisserandes des villages du Haut Atlas.
                     </p>
                 </div>
+                <button class="reserve-btn" data-event-title='Exposition "Tapis Berbères du Haut Atlas"'>Réserver</button>
             </div>
         </div>
-        
+
         <!-- Événements passés -->
-        <div class="past-events">
+        <div class="past-events" style="margin-top: 4rem;">
             <div class="section-header">
                 <h2>Événements Passés</h2>
                 <p>Revivez nos précédentes rencontres à travers ces comptes-rendus</p>
@@ -1395,25 +1507,23 @@ button:hover {
     </section>
     
     <!-- Newsletter -->
- <section style="padding: 3rem 1rem; background-color: #f9f5f0; text-align: center;">
-    <div style="max-width: 800px; margin: 0 auto;">
-        <h2 style="color: #5a3921; font-size: 1.8rem; margin-bottom: 1rem;">Vous souhaitez réserver ou obtenir plus d'informations ?</h2>
-        
-        <p style="color: #666; line-height: 1.6; margin-bottom: 2rem;">
-            Pour participer à nos événements ou ateliers artisanaux, envoyez-nous un email à l'adresse suivante :<br>
-            <strong style="color: #8b5a2b; font-size: 1.2rem;">contact@artisanat-marocain.com</strong>
-        </p>
-        
-       
-        
-        <p style="color: #888; margin-top: 2rem; font-style: italic;">
-            Nous vous répondrons dans les plus brefs délais
-        </p>
-    </div>
-</section>
+    <section style="padding: 3rem 1rem; background-color: #f9f5f0; text-align: center;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <h2 style="color: #5a3921; font-size: 1.8rem; margin-bottom: 1rem;">Vous souhaitez réserver ou obtenir plus d'informations ?</h2>
+            
+            <p style="color: #666; line-height: 1.6; margin-bottom: 2rem;">
+                Pour participer à nos événements ou ateliers artisanaux, envoyez-nous un email à l'adresse suivante :<br>
+                <strong style="color: #8b5a2b; font-size: 1.2rem;">contact@artisanat-marocain.com</strong>
+            </p>
+            
+            <p style="color: #888; margin-top: 2rem; font-style: italic;">
+                Nous vous répondrons dans les plus brefs délais
+            </p>
+        </div>
+    </section>
     
     <!-- Footer identique à home.php -->
-        <footer>
+    <footer>
         <div class="footer-wave"></div>
         <div class="footer-content ">
             <div class="footer-col">
@@ -1457,87 +1567,90 @@ button:hover {
             <p>&copy; 2025 Beldi Artisanat d'Exception. Tous droits réservés.</p>
         </div>
     </footer>
+
+    <!-- Modale réservation -->
+    <div id="reservationModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
+        <div class="modal-content" style="background:#fff; padding:20px; border-radius:8px; max-width:400px; width:90%; position:relative;">
+            <span id="closeModal" style="position:absolute; top:10px; right:15px; font-size:24px; cursor:pointer;">&times;</span>
+            <h2>Réservez votre place</h2>
+            <form id="reservationForm">
+                <input type="hidden" id="eventTitle" name="eventTitle" value="">
+                <label for="name">Nom complet:</label><br>
+                <input type="text" id="name" name="name" required><br><br>
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" required><br><br>
+                <label for="phone">Téléphone:</label><br>
+                <input type="tel" id="phone" name="phone"><br><br>
+                <button type="submit" style="background:#9e6d6d; color:#fff; border:none; padding:10px 20px; cursor:pointer;">Envoyer</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.emailjs.com/sdk/2.3.2/email.min.js"></script>
     <script>
-        // Scripts identiques à home.php
-        <?php include 'scripts.js'; ?>
+    // Initialisation EmailJS (remplace par ton user ID)
+    emailjs.init("7zbC33g0M8dUwKkr6");
 
-        // Script spécifique pour la page Événements
-        document.querySelectorAll('.event-cta').forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault();
-                const eventTitle = this.closest('.event-details').querySelector('h3').textContent;
-                alert(`Vous avez cliqué sur "${eventTitle}". Cette fonctionnalité sera implémentée prochainement.`);
-            });
-        });
+// Gestion ouverture modale réservation
+document.querySelectorAll('.reserve-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const modal = document.getElementById('reservationModal');
+    document.getElementById('eventTitle').value = btn.getAttribute('data-event-title');
+    modal.style.display = 'flex';
+  });
+});
 
-        // Animation pour le header au scroll
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('header');
-            if (window.scrollY > 50) {
-                header.style.background = 'rgba(255, 255, 255, 0.98)';
-                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.1)';
-            } else {
-                header.style.background = 'rgba(255, 255, 255, 0.95)';
-                header.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.1)';
+// Fermeture modale
+document.getElementById('closeModal').addEventListener('click', () => {
+  document.getElementById('reservationModal').style.display = 'none';
+});
+
+// Fermeture modale clic en dehors du contenu
+window.addEventListener('click', e => {
+  const modal = document.getElementById('reservationModal');
+  if (e.target === modal) {
+    modal.style.display = 'none';
+  }
+});
+
+// Envoi formulaire via EmailJS
+document.getElementById('reservationForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const templateParams = {
+    event_title: this.eventTitle.value,
+    name: this.name.value,
+    email: this.email.value,
+    phone: this.phone.value || "Non renseigné"
+  };
+
+  emailjs.send('service_56b9pls', 'template_s6cynfa', templateParams)
+    .then(() => {
+      alert('Réservation envoyée avec succès !');
+      this.reset();
+      document.getElementById('reservationModal').style.display = 'none';
+    }, (error) => {
+      alert('Erreur lors de l\'envoi, veuillez réessayer.');
+      console.error('EmailJS error:', error);
+    });
+});
+
+    // Dropdown profil
+    document.querySelector('.header-icon').addEventListener('click', e => {
+        e.preventDefault();
+        const dropdown = document.querySelector('.dropdown-menu');
+        dropdown.classList.toggle('show');
+    });
+
+    // Fermer dropdown si clic en dehors
+    window.addEventListener('click', function(e) {
+        if (!e.target.matches('.header-icon')) {
+            const dropdown = document.querySelector('.dropdown-menu');
+            if (dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
             }
-        });
-
-        // Animation fluide pour les liens
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Chargement des images avec lazy loading
-        document.addEventListener('DOMContentLoaded', function() {
-            const lazyImages = [].slice.call(document.querySelectorAll('img.lazy'));
-
-            if ('IntersectionObserver' in window) {
-                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
-                    entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            let lazyImage = entry.target;
-                            lazyImage.src = lazyImage.dataset.src;
-                            lazyImage.classList.remove('lazy');
-                            lazyImageObserver.unobserve(lazyImage);
-                        }
-                    });
-                });
-
-                lazyImages.forEach(function(lazyImage) {
-                    lazyImageObserver.observe(lazyImage);
-                });
-            }
-        });
-
-        // Gestion du dropdown profile
-        const profileTrigger = document.querySelector('.profile-trigger');
-        const dropdownMenu = document.querySelector('.dropdown-menu');
-
-        profileTrigger.addEventListener('click', function(e) {
-            e.preventDefault();
-            const isMobile = window.matchMedia("(max-width: 768px)").matches;
-
-            if (isMobile) {
-                const isOpen = dropdownMenu.style.opacity === '1';
-                dropdownMenu.style.opacity = isOpen ? '0' : '1';
-                dropdownMenu.style.visibility = isOpen ? 'hidden' : 'visible';
-                dropdownMenu.style.transform = isOpen ? 'translateY(10px)' : 'translateY(0)';
-            }
-        });
-
-        // Fermer le dropdown quand on clique ailleurs
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.profile-dropdown')) {
-                dropdownMenu.style.opacity = '0';
-                dropdownMenu.style.visibility = 'hidden';
-                dropdownMenu.style.transform = 'translateY(10px)';
-            }
-        });
+        }
+    });
     </script>
+
 </body>
-</html>
